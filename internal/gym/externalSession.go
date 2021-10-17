@@ -13,12 +13,12 @@ import (
 // Sesion ID ------------
 var ErrInvalidSessionID = errors.New("invalid Session ID")
 
-// ExternalSessionID represents the course unique identifier.
+// ExternalSessionID represents the session unique identifier.
 type ExternalSessionID struct {
 	value string
 }
 
-// NewExternalSessionID instantiate the VO for CourseID
+// NewExternalSessionID instantiate the VO for SessionID
 func NewExternalSessionID(value string) (ExternalSessionID, error) {
 	v, err := uuid.Parse(value)
 	if err != nil {

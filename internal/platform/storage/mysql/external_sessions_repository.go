@@ -25,7 +25,7 @@ func NewExternalSessionRepository(db *sql.DB, dbTimeout time.Duration) *External
 	}
 }
 
-// Update implements the mooc.CourseRepository interface.
+// Update implements the gym.ExternalSessionRepository interface.
 func (r *ExternalSessionRepository) Update(ctx context.Context, externalSession gym.ExternalSession) error {
 
 	externalSessionSQLStruct := sqlbuilder.NewStruct(new(sqlExternalSession))
@@ -42,7 +42,7 @@ func (r *ExternalSessionRepository) Update(ctx context.Context, externalSession 
 
 	_, err := r.db.ExecContext(ctxTimeout, query, args...)
 	if err != nil {
-		return fmt.Errorf("error trying to persist course on database: %v", err)
+		return fmt.Errorf("error trying to persist session on database: %v", err)
 	}
 
 	return nil
