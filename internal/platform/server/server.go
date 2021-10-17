@@ -1,6 +1,8 @@
 package server
 
 import (
+	"arnold/internal/external_login"
+	"arnold/internal/platform/server/handler/external_sessions"
 	"arnold/internal/platform/server/handler/health"
 	"context"
 	"fmt"
@@ -20,15 +22,16 @@ type Server struct {
 	shutdownTimeout time.Duration
 
 	// deps
-	// commandBus command.Bus
+	externalLogginService external_login.ExternalLooginService
 }
 
-func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration) (context.Context, Server) {
+func New(ctx context.Context, host string, port uint, shutdownTimeout time.Duration, externalLoginService external_login.ExternalLooginService) (context.Context, Server) {
 	srv := Server{
 		engine:   gin.New(),
 		httpAddr: fmt.Sprintf("%s:%d", host, port),
 
-		shutdownTimeout: shutdownTimeout,
+		shutdownTimeout:       shutdownTimeout,
+		externalLogginService: externalLoginService,
 	}
 
 	srv.registerRoutes()
@@ -39,6 +42,7 @@ func (s *Server) registerRoutes() {
 	s.engine.Use(gin.Logger(), gin.Recovery())
 
 	s.engine.GET("/health", health.CheckHandler())
+	s.engine.GET("/session/:userid", external_sessions.ExternalLoggingHandler(s.externalLogginService))
 
 }
 
