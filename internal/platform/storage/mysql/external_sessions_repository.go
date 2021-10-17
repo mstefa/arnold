@@ -10,7 +10,7 @@ import (
 	"github.com/huandu/go-sqlbuilder"
 )
 
-// ExternalSession is a MySQL gym.ExternalSessionRepository implementation.
+// ExternalSessionRepository is a MySQL gym.ExternalSessionRepository implementation.
 type ExternalSessionRepository struct {
 	db        *sql.DB
 	dbTimeout time.Duration

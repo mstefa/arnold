@@ -36,30 +36,6 @@ func (id ExternalSessionID) String() string {
 	return id.value
 }
 
-// USER ID ------------
-var ErrInvalidUserID = errors.New("invalid User ID")
-
-// UserId represent the user that own the session
-type UserID struct {
-	value string
-}
-
-func NewUserID(value string) (UserID, error) {
-	v, err := uuid.Parse(value)
-	if err != nil {
-		return UserID{}, fmt.Errorf("%w: %s", ErrInvalidUserID, value)
-	}
-
-	return UserID{
-		value: v.String(),
-	}, nil
-
-}
-
-func (id UserID) String() string {
-	return id.value
-}
-
 // ACCES TOKEN------------
 var ErrEmptyAccessToken = errors.New("the field Access Token can not be empty")
 
@@ -162,6 +138,10 @@ type ExternalSession struct {
 // ExternalSessionRepository defines the expected behaviour from a external session storage.
 type ExternalSessionRepository interface {
 	Update(ctx context.Context, externalSession ExternalSession) error
+}
+
+type ExternalSessionClient interface {
+	getToken(ctx context.Context, externalSession ExternalSession) error
 }
 
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=ExternalSessionRepository
