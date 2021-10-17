@@ -141,7 +141,7 @@ type ExternalSessionRepository interface {
 }
 
 type ExternalSessionClient interface {
-	getToken(ctx context.Context, externalSession ExternalSession) error
+	getToken(ctx context.Context, user User) (ExternalSession, error)
 }
 
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=ExternalSessionRepository
