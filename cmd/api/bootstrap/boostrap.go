@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"arnold/internal/external_login"
+	"arnold/internal/platform/externalAPI/megatlon"
 	"arnold/internal/platform/server"
 	"arnold/internal/platform/storage/mysql"
 	"context"
@@ -27,8 +28,9 @@ func Run() error {
 	}
 
 	externalSessionRepository := mysql.NewExternalSessionRepository(db, cfg.DbTimeout)
+	externalSessionClient := megatlon.NewExternalSessionClient()
 
-	externalLooginService := external_login.NewExternalLooginService(externalSessionRepository)
+	externalLooginService := external_login.NewExternalLooginService(externalSessionRepository, externalSessionClient)
 
 	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.ShutdownTimeout, externalLooginService)
 	return srv.Run(ctx)

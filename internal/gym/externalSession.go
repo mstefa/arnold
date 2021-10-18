@@ -140,11 +140,12 @@ type ExternalSessionRepository interface {
 	Update(ctx context.Context, externalSession ExternalSession) error
 }
 
-type ExternalSessionClient interface {
-	getToken(ctx context.Context, user User) (ExternalSession, error)
-}
-
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=ExternalSessionRepository
+
+// ExternalSessionClient defines the expected behaviour from a external api conection.
+type ExternalSessionClient interface {
+	getToken(user User) (ExternalSession, error)
+}
 
 func NewExternalSession(id, userID, accessToken, refreshToken, scope, tokenType string) (ExternalSession, error) {
 
@@ -188,7 +189,6 @@ func NewExternalSession(id, userID, accessToken, refreshToken, scope, tokenType 
 	}
 
 	return externalSession, nil
-
 }
 
 // GETTERS

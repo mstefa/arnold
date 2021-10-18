@@ -7,12 +7,14 @@ import (
 
 type ExternalLooginService struct {
 	ExternalSessionRepository gym.ExternalSessionRepository
+	ExternalSessionClient     gym.ExternalSessionClient
 }
 
-func NewExternalLooginService(externalSessionRepository gym.ExternalSessionRepository) ExternalLooginService {
+func NewExternalLooginService(externalSessionRepository gym.ExternalSessionRepository, externalSessionClient gym.ExternalSessionClient) ExternalLooginService {
 
 	return ExternalLooginService{
 		ExternalSessionRepository: externalSessionRepository,
+		ExternalSessionClient:     externalSessionClient,
 	}
 }
 
@@ -27,6 +29,15 @@ func (s ExternalLooginService) Loggin(ctx context.Context, userID string) error 
 	externalSession, err := gym.NewExternalSession(id, userID, accessToken, refreshToken, scope, tokenType)
 	if err != nil {
 		return err
+	}
+
+	user, err := gym.NewUser(userID, "mstefanutti24@gmail.com", "holamundo")
+	if err != nil {
+		return err
+	}
+	_, err2 := s.ExternalSessionClient.getToken(user) // porq no reconoce el metodo??
+	if err != nil {
+		return err2
 	}
 
 	// err = s.ExternalSessionRepository.Update(ctx, externalSession)

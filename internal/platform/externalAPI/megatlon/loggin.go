@@ -2,7 +2,6 @@ package megatlon
 
 import (
 	"arnold/internal/gym"
-	"context"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -22,7 +21,7 @@ func NewExternalSessionClient() *ExternalSessionClient {
 	}
 }
 
-func (c *ExternalSessionClient) getToken(ctx context.Context, user User) (gym.ExternalSession, error) {
+func (c *ExternalSessionClient) getToken(user User) (gym.ExternalSession, error) {
 
 	payload := strings.NewReader("username=mstefanutti24@gmail.com&password=Vsq6Q#ui3xp8pWg&grant_type=password&app_version=1.0")
 
@@ -50,5 +49,6 @@ func (c *ExternalSessionClient) getToken(ctx context.Context, user User) (gym.Ex
 		return gym.ExternalSession{}, err
 	}
 	fmt.Println(string(body))
+
 	return gym.ExternalSession{}, err
 }
