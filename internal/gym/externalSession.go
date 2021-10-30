@@ -144,7 +144,7 @@ type ExternalSessionRepository interface {
 
 // ExternalSessionClient defines the expected behaviour from a external api conection.
 type ExternalSessionClient interface {
-	getToken(user User) (ExternalSession, error)
+	GetToken(user User) (ExternalSession, error)
 }
 
 func NewExternalSession(id, userID, accessToken, refreshToken, scope, tokenType string) (ExternalSession, error) {

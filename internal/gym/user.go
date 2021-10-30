@@ -107,3 +107,15 @@ func NewUser(userID, email, password string) (User, error) {
 	return user, nil
 
 }
+
+func (u User) ID() UserID {
+	return u.id
+}
+
+func (u User) Email() Email {
+	return u.email
+}
+
+func (u User) Password() Password {
+	return u.password
+}

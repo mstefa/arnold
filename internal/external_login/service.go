@@ -35,7 +35,7 @@ func (s ExternalLooginService) Loggin(ctx context.Context, userID string) error 
 	if err != nil {
 		return err
 	}
-	_, err2 := s.ExternalSessionClient.getToken(user) // porq no reconoce el metodo??
+	_, err2 := s.ExternalSessionClient.GetToken(user) // porq no reconoce el metodo??
 	if err != nil {
 		return err2
 	}
