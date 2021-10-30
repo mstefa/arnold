@@ -61,7 +61,7 @@ func (c *ExternalSessionClient) GetToken(user gym.User) (gym.ExternalSession, er
 	json.Unmarshal(body, &responseObject)
 	fmt.Printf("API Response as struct %+v\n", responseObject)
 
-	r, err := gym.NewExternalSession(user.ID.String(), user.ID, responseObject.AccessToken, responseObject.RefreshToken, responseObject.Scope, responseObject.TokenType)
+	r, err := gym.NewExternalSession(user.ID().String(), user.ID().String(), responseObject.AccessToken, responseObject.RefreshToken, responseObject.Scope, responseObject.TokenType)
 
 	return r, err
 }

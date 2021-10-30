@@ -58,7 +58,7 @@ func (v AccessToken) String() string {
 	return v.value
 }
 
-// REFRESH TOKEN------------
+// ErrEmptyRefreshToken REFRESH TOKEN------------
 var ErrEmptyRefreshToken = errors.New("the field Refresh Token can not be empty")
 
 type RefreshToken struct {

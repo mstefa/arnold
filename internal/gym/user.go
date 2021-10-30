@@ -8,10 +8,10 @@ import (
 	"github.com/google/uuid"
 )
 
-// USER ID ------------
+// ErrInvalidUserID USER ID ------------
 var ErrInvalidUserID = errors.New("invalid User ID")
 
-// UserId represent the user that own the session
+// UserID  represent the user that own the session
 type UserID struct {
 	value string
 }
@@ -32,7 +32,7 @@ func (id UserID) String() string {
 	return id.value
 }
 
-// EMAIL------------
+// ErrInvalidEmail EMAIL------------
 var ErrInvalidEmail = errors.New("invalid email")
 
 type Email struct {
