@@ -15,7 +15,7 @@ type ExternalSessionClient struct {
 }
 
 type Response struct {
-	AccessToken  string `json:"acces_token"`
+	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`
 	TokenType    string `json:"token_type"`
 	Scope        string `json:"scope"`
@@ -62,6 +62,5 @@ func (c *ExternalSessionClient) GetToken(user gym.User) (gym.ExternalSession, er
 	fmt.Printf("API Response as struct %+v\n", responseObject)
 
 	r, err := gym.NewExternalSession(user.ID().String(), user.ID().String(), responseObject.AccessToken, responseObject.RefreshToken, responseObject.Scope, responseObject.TokenType)
-
 	return r, err
 }

@@ -13,7 +13,7 @@ func ExternalLoggingHandler(externalSessionService external_login.ExternalLoogin
 	return func(ctx *gin.Context) {
 
 		userId := ctx.Param("userid")
-		err := externalSessionService.Loggin(ctx, userId)
+		_, err := externalSessionService.Login(ctx, userId)
 
 		if err != nil {
 			switch {

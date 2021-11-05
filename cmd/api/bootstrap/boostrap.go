@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"arnold/internal/cronjob"
 	"arnold/internal/external_login"
 	"arnold/internal/platform/externalAPI/megatlon"
 	"arnold/internal/platform/server"
@@ -32,8 +33,16 @@ func Run() error {
 
 	externalLooginService := external_login.NewExternalLooginService(externalSessionRepository, externalSessionClient)
 
+	cj := cronjob.NewCronJob(externalLooginService)
+	go cj.Init()
+	//sig := make(chan os.Signal)
+	//signal.Notify(sig, os.Interrupt, os.Kill)
+	//<-sig
+
 	ctx, srv := server.New(context.Background(), cfg.Host, cfg.Port, cfg.ShutdownTimeout, externalLooginService)
 	return srv.Run(ctx)
+
+
 }
 
 type config struct {
