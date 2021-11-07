@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"time"
 
@@ -21,9 +22,9 @@ type CronJob struct {
 }
 
 type GymClassRes struct {
-	ClassId      string `json:"claseId"`
-	DisciplineId string `json:"disciplinaId"`
-	CoachId      string `json:"coachId"`
+	ClassId      int `json:"claseId"`
+	DisciplineId int `json:"disciplinaId"`
+	CoachId      int `json:"coachId"`
 	CoachName    string `json:"coachName"`
 	Date         string `json:"fecha"`
 	Duration     string `json:"duracion"`
@@ -42,8 +43,8 @@ func NewCronJob(externalSessionService external_login.ExternalLooginService) Cro
 
 func (cj CronJob) Init() {
 	c := cron.New()
-	//c.AddFunc("48 */1 * * *", cj.CronJobReservation)
-	c.AddFunc("@every 10s", cj.CronJobReservation)
+	c.AddFunc("15 19 * * *", cj.CronJobReservation)  //every day at 19:15
+	//c.AddFunc("@every 10s", cj.CronJobReservation) //Testing
 	go c.Start()
 
 	// Start cron with one scheduled job
@@ -106,12 +107,12 @@ func (cj CronJob) CronJobReservation() {
 	fmt.Println("time now UTC")
 	fmt.Println(time.Now().UTC())
 	fmt.Println("2 day 23 hour ahead")
-	//timeIn := time.Now().UTC().Add(time.Hour * (47) + time.Minute * 50)  // Two days ahead with 10 mins tolerance
-	timeIn := time.Now().UTC().Add(time.Hour * (46+24) + time.Minute * 20)  // Two days ahead with 10 mins tolerance
+	timeIn := time.Now().UTC().Add(time.Hour * (47) + time.Minute * 50)  // Two days ahead with 10 mins tolerance
+	//timeIn := time.Now().UTC().Add(time.Hour * (46) + time.Minute * 20)  // Testing
 	fmt.Println(timeIn)
 	fmt.Println("3 day 1 hour ahead")
-	//timeOut := time.Now().UTC().Add(time.Hour * (48) + time.Minute * 10) // Two days ahead with 10 mins tolerance
-	timeOut := time.Now().UTC().Add(time.Hour * (48+24) + time.Minute * 10) // Two days ahead with 10 mins tolerance
+	timeOut := time.Now().UTC().Add(time.Hour * (48) + time.Minute * 10) // Two days ahead with 10 mins tolerance
+	//timeOut := time.Now().UTC().Add(time.Hour * (48) + time.Minute * 10) // Testing
 	fmt.Println(timeOut )
 
 	for i := 0; i < len(gymClassListRes.Result); i++ {
@@ -129,11 +130,12 @@ func (cj CronJob) CronJobReservation() {
 			return
 		}
 		if t.After(timeIn) && t.Before(timeOut){
-			fmt.Println("Reservation time")
-			println(gymClassListRes.Result[i].Date)
-			println(gymClassListRes.Result[i].ClassId)
-			println(gymClassListRes.Result[i].FreeSpots)
-			BookClass(gymClassListRes.Result[i].ClassId, auth)
+			fmt.Println("Book! ")
+			fmt.Println(gymClassListRes.Result[i])
+			fmt.Println("ClassId")
+			fmt.Println(gymClassListRes.Result[i].ClassId)
+			fmt.Println(gymClassListRes.Result[i].FreeSpots)
+			BookClass(strconv.Itoa(gymClassListRes.Result[i].ClassId), auth)
 		}
 	}
 
@@ -144,6 +146,8 @@ func BookClass(classId, token string){
 	url := "https://classes.megatlon.com.ar/api/service/class/book"
 	method := "POST"
 	reqBody := `{"claseId": "` + classId + `"}`
+	fmt.Println("Body")
+	fmt.Println(reqBody)
 
 
 	payload := strings.NewReader(reqBody)
@@ -174,5 +178,6 @@ func BookClass(classId, token string){
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(string(body))
+	fmt.Println(string(body)) // succes: {"code":0,"message":"OK","result":null}
+
 }
